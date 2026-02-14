@@ -3,8 +3,6 @@ services:
     build: .
     restart: unless-stopped
     env_file: .env
-    volumes:
-      # Claude Code auth session
-      - ${HOME}/.claude:/home/node/.claude
-      # AWS credentials for Transcribe
-      - ${HOME}/.aws:/home/node/.aws:ro
+    environment:
+      CLAUDE_CREDENTIALS_SECRET: tunabot/claude-credentials
+      AWS_REGION: eu-central-1

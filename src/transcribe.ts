@@ -4,12 +4,8 @@ import {
   LanguageCode,
   MediaEncoding,
 } from "@aws-sdk/client-transcribe-streaming";
-import { fromIni } from "@aws-sdk/credential-providers";
-import { Readable } from "node:stream";
-
 const client = new TranscribeStreamingClient({
-  region: "eu-west-1",
-  credentials: fromIni({ profile: "nixo" }),
+  region: process.env.AWS_REGION || "eu-central-1",
 });
 
 async function* audioStream(buffer: Buffer) {

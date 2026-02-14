@@ -1,5 +1,9 @@
 FROM node:22-slim
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    awscli \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install Claude Code CLI
 RUN npm install -g @anthropic-ai/claude-code
 
@@ -14,6 +18,7 @@ COPY tsconfig.json drizzle.config.ts ./
 # tsx and drizzle-kit needed at runtime
 RUN npm install tsx drizzle-kit
 
+COPY entrypoint.sh ./
 USER node
 
-CMD ["sh", "-c", "npx drizzle-kit push && npx tsx src/index.ts"]
+ENTRYPOINT ["./entrypoint.sh"]
