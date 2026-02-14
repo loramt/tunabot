@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ginger_ai
+      POSTGRES_USER: tuna
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tunabot}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tuna -d ginger_ai"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  bot:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://tuna:${POSTGRES_PASSWORD:-tunabot}@db:5432/ginger_ai
+    volumes:
+      # Claude Code auth session
+      - ${HOME}/.claude:/root/.claude
+      # AWS credentials for Transcribe
+      - ${HOME}/.aws:/root/.aws:ro
+
+volumes:
+  pgdata:
