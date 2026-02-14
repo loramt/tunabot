@@ -14,4 +14,6 @@ COPY tsconfig.json drizzle.config.ts ./
 # tsx and drizzle-kit needed at runtime
 RUN npm install tsx drizzle-kit
 
+USER node
+
 CMD ["sh", "-c", "npx drizzle-kit push && npx tsx src/index.ts"]

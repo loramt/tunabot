@@ -5,6 +5,6 @@ services:
     env_file: .env
     volumes:
       # Claude Code auth session
-      - ${HOME}/.claude:/root/.claude
+      - ${HOME}/.claude:/home/node/.claude
       # AWS credentials for Transcribe
-      - ${HOME}/.aws:/root/.aws:ro
+      - ${HOME}/.aws:/home/node/.aws:ro
